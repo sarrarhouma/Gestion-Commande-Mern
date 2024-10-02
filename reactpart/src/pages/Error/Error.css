@@ -1,0 +1,39 @@
+/* Styles pour la page d'erreur "404 Not Found" */
+.not-found-page {
+    text-align: center; /* Texte centré */
+    padding: 20px; /* Espacement interne */
+    margin: 40px auto; /* Centré horizontalement avec un espacement vertical */
+    background-color: #f9f9f9; /* Couleur de fond claire */
+    border: 1px solid #e0e0e0; /* Bordure légère */
+    border-radius: 8px; /* Coins arrondis */
+    max-width: 600px; /* Largeur maximale */
+}
+
+/* Titre de la page d'erreur */
+.not-found-page h1 {
+    font-size: 48px; /* Taille de police */
+    color: #dc3545; /* Couleur rouge */
+    margin-bottom: 20px; /* Espacement en bas du titre */
+}
+
+/* Description de la page d'erreur */
+.not-found-page p {
+    color: #6c757d; /* Couleur de texte */
+    font-size: 18px; /* Taille de police */
+    margin-bottom: 20px; /* Espacement en bas */
+}
+
+/* Lien pour retourner à la page d'accueil */
+.back-link {
+    padding: 10px 20px; /* Espacement interne */
+    background-color: #007BFF; /* Couleur de fond bleue */
+    color: white; /* Couleur du texte */
+    text-decoration: none; /* Pas de soulignement */
+    border-radius: 5px; /* Coins arrondis */
+    font-weight: bold; /* Texte en gras */
+}
+
+/* Effets de survol sur le lien */
+.back-link:hover {
+    background-color: #0056b3; /* Couleur bleue plus foncée */
+}

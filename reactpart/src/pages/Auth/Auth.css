@@ -1,0 +1,67 @@
+/* Conteneur pour les pages d'authentification */
+.auth-container {
+    max-width: 400px; /* Largeur maximale du conteneur */
+    margin: 40px auto; /* Centré horizontalement avec un espacement vertical */
+    padding: 20px; /* Espacement interne */
+    background-color: #f9f9f9; /* Couleur de fond claire */
+    border: 1px solid #e0e0e0; /* Bordure légère */
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre subtile pour plus de profondeur */
+}
+
+/* Titre de la page d'authentification */
+.auth-container h2 {
+    margin-bottom: 20px; /* Espacement en bas du titre */
+    color: #343a40; /* Couleur du texte */
+    font-weight: bold; /* Texte en gras */
+    font-size: 24px; /* Taille de police */
+}
+
+/* Styles pour les champs de formulaire */
+.auth-container input {
+    width: 100%; /* Largeur complète */
+    padding: 10px; /* Espacement interne */
+    margin-bottom: 15px; /* Espacement en bas de chaque champ */
+    border: 1px solid #ced4da; /* Bordure légère */
+    border-radius: 5px; /* Coins arrondis */
+    font-size: 16px; /* Taille de police */
+    outline: none; /* Pas de focus sur la bordure */
+    transition: border-color 0.3s ease; /* Transition de couleur de bordure */
+}
+
+/* Changement de couleur de bordure lors de la mise au point */
+.auth-container input:focus {
+    border-color: #007BFF; /* Couleur bleue lors de la mise au point */
+}
+
+/* Style pour les boutons */
+.auth-container button {
+    width: 100%; /* Largeur complète */
+    padding: 10px; /* Espacement interne */
+    background-color: #007BFF; /* Couleur de fond bleue */
+    color: white; /* Couleur du texte */
+    border: none; /* Pas de bordure */
+    border-radius: 5px; /* Coins arrondis */
+    font-size: 16px; /* Taille de police */
+    cursor: pointer; /* Curseur pointer */
+    transition: background-color 0.3s ease; /* Transition de couleur de fond */
+}
+
+/* Changement de couleur de fond au survol */
+.auth-container button:hover {
+    background-color: #0056b3; /* Couleur bleue plus foncée */
+}
+
+/* Styles pour les messages d'erreur */
+.auth-container .error {
+    color: #d9534f; /* Couleur rouge */
+    margin-bottom: 15px; /* Espacement en bas du message */
+    font-weight: bold; /* Texte en gras */
+}
+
+/* Styles pour les messages de succès */
+.auth-container p {
+    color: #5cb85c; /* Couleur verte */
+    margin-bottom: 15px; /* Espacement en bas du message */
+    font-weight: bold; /* Texte en gras */
+}

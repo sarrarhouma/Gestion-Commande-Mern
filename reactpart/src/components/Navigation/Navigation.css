@@ -1,0 +1,81 @@
+/* Styles pour la barre de navigation (Navbar) */
+.navbar {
+    background-color: #007BFF; /* Couleur de fond bleue */
+    padding: 10px 20px; /* Espacement interne */
+    display: flex; /* Disposition en ligne */
+    justify-content: space-between; /* Espacement entre les éléments */
+    align-items: center; /* Aligner les éléments verticalement */
+    color: white; /* Couleur du texte */
+}
+
+.navbar .navbar-brand {
+    font-weight: bold; /* Texte en gras pour le nom ou logo */
+    font-size: 18px; /* Taille de police */
+}
+
+.navbar .navbar-menu {
+    list-style-type: none; /* Pas de puces */
+    padding: 0; /* Pas de padding */
+    display: flex; /* Disposition en ligne */
+    gap: 20px; /* Espace entre les éléments */
+}
+
+.navbar .navbar-item {
+    display: flex; /* Disposition en ligne */
+    align-items: center; /* Aligner les éléments verticalement */
+}
+
+.navbar .navbar-item a {
+    color: white; /* Couleur du texte */
+    text-decoration: none; /* Pas de soulignement */
+    font-weight: 500; /* Poids de police */
+}
+
+.navbar .navbar-item a:hover {
+    text-decoration: underline; /* Soulignement au survol */
+}
+
+/* Styles pour le menu latéral (SideMenu) */
+.side-menu {
+    position: fixed; /* Position fixe */
+    left: 0; /* Aligné à gauche */
+    top: 0; /* Aligné en haut */
+    height: 100%; /* Hauteur de 100% de la fenêtre */
+    width: 250px; /* Largeur du menu */
+    background-color: #343a40; /* Couleur de fond sombre */
+    padding: 20px; /* Espacement interne */
+    transform: translateX(-100%); /* Masque le menu latéral */
+    transition: transform 0.3s ease; /* Transition pour le déplacement */
+    z-index: 1000; /* Z-index élevé pour superposition */
+    color: white; /* Couleur du texte */
+}
+
+.side-menu.open {
+    transform: translateX(0); /* Affiche le menu lorsqu'il est ouvert */
+}
+
+.side-menu .close-button {
+    background: none; /* Aucun fond */
+    border: none; /* Pas de bordure */
+    color: white; /* Couleur blanche */
+    font-size: 24px; /* Taille de police */
+    cursor: pointer; /* Curseur pointer */
+}
+
+.side-menu .side-menu-list {
+    list-style-type: none; /* Pas de puces */
+    padding: 0; /* Pas de padding */
+}
+
+.side-menu .side-menu-item {
+    padding: 10px 0; /* Espacement entre les éléments */
+}
+
+.side-menu .side-menu-item a {
+    color: white; /* Couleur du texte */
+    text-decoration: none; /* Pas de soulignement */
+}
+
+.side-menu .side-menu-item a:hover {
+    text-decoration: underline; /* Soulignement au survol */
+}

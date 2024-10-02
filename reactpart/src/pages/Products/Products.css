@@ -1,0 +1,16 @@
+/* Styles pour la page de gestion des produits */
+.products-page {
+    max-width: 1000px; /* Largeur maximale de la page */
+    margin: 40px auto; /* Centré horizontalement avec un espacement vertical */
+    padding: 20px; /* Espacement interne */
+    background-color: #f9f9f9; /* Couleur de fond claire */
+    border-radius: 8px; /* Coins arrondis */
+}
+
+/* Titre de la page de produits */
+.products-page h2 {
+    margin-bottom: 20px; /* Espacement en bas du titre */
+    color: #343a40; /* Couleur du texte */
+    font-weight: bold; /* Texte en gras */
+    font-size: 24px; /* Taille de police */
+}

@@ -1,0 +1,62 @@
+.orders-page {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.orders-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colonnes dans la grille */
+    gap: 20px; /* Espacement entre les cartes */
+}
+
+.order-card {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.actions {
+    margin-top: 10px;
+}
+
+.btn {
+    margin-right: 20px;
+}
+/* Styles des boutons */
+.btn.add-order-btn {
+    background-color: blue; /* Couleur du bouton Ajouter Commande */
+    color: white;
+}
+
+.btn.edit-btn {
+    background-color: green; /* Couleur du bouton Modifier */
+    color: white;
+    
+}
+
+.btn.delete-btn {
+    background-color: red; /* Couleur du bouton Supprimer */
+    color: white;
+  
+}
+/* Styles pour la barre de recherche */
+.search-bar {
+    width: 100%; /* La largeur de l'input s'adapte à la taille de l'écran */
+    max-width: 400px; /* Largeur maximale pour la barre de recherche */
+    padding: 8px 12px; /* Espacement interne de l'input */
+    margin: 10px 0; /* Espacement autour de l'input */
+    border-radius: 8px; /* Bordures arrondies */
+    border: 1px solid #ccc; /* Bordure de couleur grise */
+    outline: none; /* Retire le contour bleu lors du focus */
+    transition: border-color 0.3s ease; /* Animation de la couleur de bordure lors du focus */
+}
+
+/* Changer la couleur de bordure et d'arrière-plan lors du focus */
+.search-bar:focus {
+    border-color: #007bff; /* Bordure bleue lors du focus */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Ombre autour de l'input lors du focus */
+}
+
+

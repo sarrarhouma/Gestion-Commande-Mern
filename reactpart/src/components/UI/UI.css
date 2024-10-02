@@ -1,0 +1,75 @@
+/* Bouton - Button.js */
+.button {
+    padding: 10px 20px;
+    background-color: #007BFF; /* Couleur bleue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.button:hover {
+    background-color: #0056b3; /* Couleur bleue plus foncée au survol */
+}
+
+.button:active {
+    transform: scale(0.98); /* Réduit légèrement la taille au clic */
+}
+
+.button:disabled {
+    background-color: #6c757d; /* Couleur grise si désactivé */
+    cursor: not-allowed;
+}
+
+/* Champ de texte - InputField.js */
+.input-field {
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-field:focus {
+    border-color: #007BFF; /* Couleur bleue lors de la mise au point */
+}
+
+.input-field:disabled {
+    background-color: #e9ecef; /* Couleur de fond grise si désactivé */
+}
+
+/* Formulaire - Form.js */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espace entre les éléments du formulaire */
+}
+
+.form .input-field,
+.form .button {
+    margin-bottom: 10px;
+}
+
+/* Styles globaux */
+body {
+    font-family: Arial, sans-serif;
+    color: #343a40; /* Couleur de texte */
+}
+
+h1, h2, h3 {
+    color: #343a40; /* Couleur des titres */
+}
+
+ul {
+    list-style-type: none; /* Pas de puces pour les listes */
+    padding: 0;
+}
+
+li {
+    padding: 5px 0; /* Espacement entre les éléments de liste */
+}

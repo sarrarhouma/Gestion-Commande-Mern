@@ -1,0 +1,60 @@
+/* Conteneur pour le formulaire d'ajout de clients */
+.add-client-form {
+    max-width: 600px; /* Largeur maximale du formulaire */
+    margin: 0 auto; /* Centré horizontalement */
+    padding: 20px; /* Espacement interne */
+    background-color: #f9f9f9; /* Couleur de fond claire */
+    border: 1px solid #e0e0e0; /* Bordure légère */
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre subtile pour plus de profondeur */
+}
+
+/* Titre du formulaire d'ajout de clients */
+.add-client-form h2 {
+    color: #343a40; /* Couleur du texte */
+    font-weight: bold; /* Texte en gras */
+    font-size: 24px; /* Taille de police */
+    margin-bottom: 20px; /* Espacement en bas du titre */
+}
+
+/* Styles pour les champs de formulaire */
+.add-client-form input {
+    width: 100%; /* Largeur complète */
+    padding: 10px; /* Espacement interne */
+    margin-bottom: 15px; /* Espacement en bas de chaque champ */
+    border: 1px solid #ced4da; /* Bordure légère */
+    border-radius: 5px; /* Coins arrondis */
+    font-size: 16px; /* Taille de police */
+    outline: none; /* Pas de focus sur la bordure */
+    transition: border-color 0.3s ease; /* Transition de couleur de bordure */
+}
+
+/* Changement de couleur de bordure lors de la mise au point */
+.add-client-form input:focus {
+    border-color: #007bff; /* Couleur bleue lors de la mise au point */
+}
+
+/* Styles pour le bouton d'ajout */
+.add-client-form button {
+    width: 100%; /* Largeur complète */
+    padding: 10px; /* Espacement interne */
+    background-color: #007bff; /* Couleur de fond bleue */
+    color: white; /* Couleur du texte */
+    border: none; /* Pas de bordure */
+    border-radius: 5px; /* Coins arrondis */
+    font-size: 16px; /* Taille de police */
+    cursor: pointer; /* Curseur pointer */
+    transition: background-color 0.3s ease; /* Transition de couleur de fond */
+}
+
+/* Changement de couleur de fond au survol */
+.add-client-form button:hover {
+    background-color: #0056b3; /* Couleur bleue plus foncée */
+}
+
+/* Styles pour les messages d'erreur */
+.add-client-form .error {
+    color: #d9534f; /* Couleur rouge */
+    margin-bottom: 15px; /* Espacement en bas du message */
+    font-weight: bold; /* Texte en gras */
+}

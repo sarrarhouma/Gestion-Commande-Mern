@@ -1,0 +1,64 @@
+/* Styles pour le formulaire d'ajout/modification de fournisseur */
+.add-supplier-form {
+    max-width: 600px; /* Largeur maximale du formulaire */
+    margin: 40px auto; /* Centré horizontalement avec espacement vertical */
+    padding: 20px; /* Espacement interne */
+    background-color: #f9f9f9; /* Couleur de fond claire */
+    border-radius: 8px; /* Coins arrondis */
+}
+
+/* Style du titre */
+.add-supplier-form h2 {
+    color: #343a40; /* Couleur du texte */
+    font-weight: bold; /* Texte en gras */
+    font-size: 24px; /* Taille de police */
+    margin-bottom: 20px; /* Espacement en bas du titre */
+}
+
+/* Style pour les champs d'entrée */
+.add-supplier-form input {
+    width: 100%; /* Largeur complète */
+    padding: 10px; /* Espacement interne */
+    margin-bottom: 15px; /* Espacement en bas de chaque champ */
+    border: 1px solid #ced4da; /* Bordure légère */
+    border-radius: 5px; /* Coins arrondis */
+    font-size: 16px; /* Taille de police */
+    outline: none; /* Pas de focus sur la bordure */
+    transition: border-color 0.3s ease; /* Transition de couleur de bordure */
+}
+
+/* Changement de couleur de bordure lors de la mise au point */
+.add-supplier-form input:focus {
+    border-color: #007bff; /* Couleur bleue lors de la mise au point */
+}
+
+/* Style pour le bouton de soumission */
+.add-supplier-form button {
+    width: 100%; /* Largeur complète */
+    padding: 10px; /* Espacement interne */
+    background-color: #007bff; /* Couleur de fond bleue */
+    color: white; /* Couleur du texte */
+    border: none; /* Pas de bordure */
+    border-radius: 5px; /* Coins arrondis */
+    font-size: 16px; /* Taille de police */
+    cursor: pointer; /* Curseur pointer */
+    transition: background-color 0.3s ease; /* Transition de couleur de fond */
+}
+
+/* Changement de couleur de fond au survol */
+.add-supplier-form button:hover {
+    background-color: #0056b3; /* Couleur bleue plus foncée */
+}
+
+/* Style pour le lien de retour à la liste */
+.back-to-list-link {
+    color: #007bff; /* Couleur du lien */
+    text-decoration: none; /* Pas de soulignement */
+    display: inline-block; /* Liens en ligne */
+    margin-top: 20px; /* Espacement en haut du lien */
+}
+
+/* Soulignement au survol */
+.back-to-list-link:hover {
+    text-decoration: underline; /* Soulignement lors du survol */
+}

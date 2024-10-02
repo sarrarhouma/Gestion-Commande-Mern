@@ -1,0 +1,41 @@
+/* Styles pour la page d'accueil */
+.home-page {
+    max-width: 1000px; /* Largeur maximale de la page */
+    margin: 40px auto; /* Centré horizontalement avec un espacement vertical */
+    padding: 20px; /* Espacement interne */
+    background-color: #f9f9f9; /* Couleur de fond claire */
+    border-radius: 8px; /* Coins arrondis */
+    text-align: center; /* Texte centré */
+}
+
+/* Titre de la page d'accueil */
+.home-page h1 {
+    color: #343a40; /* Couleur du texte */
+    font-weight: bold; /* Texte en gras */
+    font-size: 32px; /* Taille de police */
+    margin-bottom: 20px; /* Espacement en bas du titre */
+}
+
+/* Description de la page d'accueil */
+.home-page p {
+    color: #6c757d; /* Couleur de texte */
+    font-size: 18px; /* Taille de police */
+    margin-bottom: 40px; /* Espacement en bas */
+}
+
+/* Liens de la page d'accueil */
+.home-link {
+    display: inline-block; /* Les liens sont des éléments en ligne */
+    margin: 10px; /* Espacement entre les liens */
+    padding: 10px 20px; /* Espacement interne */
+    background-color: #007BFF; /* Couleur de fond bleue */
+    color: white; /* Couleur du texte */
+    border-radius: 5px; /* Coins arrondis */
+    text-decoration: none; /* Pas de soulignement */
+    font-weight: 500; /* Poids de police */
+}
+
+/* Effets de survol sur les liens */
+.home-link:hover {
+    background-color: #0056b3; /* Couleur bleue plus foncée */
+}
