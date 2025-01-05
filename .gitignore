@@ -1,0 +1,10 @@
+# Node.js
+node_modules/
+.env
+npm-debug.log*
+
+# Build outputs
+build/
+dist/
+reactpart/node_modules/
+reactpart/build/

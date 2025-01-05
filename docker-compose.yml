@@ -1,0 +1,35 @@
+services:
+  backend:
+    build:
+      context: ./partie-node
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./partie-node:/app
+      - /app/node_modules
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URI: mongodb://mongo:27017/gestion-commandes
+
+  frontend:
+    build:
+      context: ./reactpart
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    volumes:
+      - ./reactpart:/app
+      - /app/node_modules
+
+  mongo:
+    image: mongo:6
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
