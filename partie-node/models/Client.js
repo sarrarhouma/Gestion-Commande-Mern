@@ -1,7 +1,5 @@
-// models/Client.js
-
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');  // Remplacer bcrypt par bcryptjs
 
 const clientSchema = new mongoose.Schema({
     name: {
@@ -43,7 +41,7 @@ const clientSchema = new mongoose.Schema({
 clientSchema.pre('save', async function(next) {
     const client = this;
     if (client.isModified('password')) {
-        const salt = await bcrypt.genSalt(10);
+        const salt = await bcrypt.genSalt(10);  // Utilisez bcryptjs ici
         client.password = await bcrypt.hash(client.password, salt);
     }
     next();

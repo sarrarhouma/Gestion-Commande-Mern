@@ -8,3 +8,5 @@ build/
 dist/
 reactpart/node_modules/
 reactpart/build/
+
+partie-node/node_modules/

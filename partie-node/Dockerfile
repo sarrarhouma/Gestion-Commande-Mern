@@ -1,24 +1,19 @@
-# Étape 1 : Utilisation d'une image Node.js Alpine pour un conteneur léger
-FROM node:lts-alpine
+# Assurez-vous que la version de Node.js et npm sont installées
+FROM node:latest
 
-# Étape 2 : Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Étape 3 : Copier uniquement les fichiers package.json et package-lock.json
-# Cela permet de tirer parti du cache Docker si les dépendances n'ont pas changé
+# Copiez les fichiers de votre application
 COPY package*.json ./
 
-# Étape 4 : Installer les dépendances
-RUN npm install
+# Installez les dépendances
+RUN npm install --build-from-source
 
-# Étape 5 : Copier le reste des fichiers du backend
+# Copiez le reste de votre application
 COPY . .
 
-# Étape 6 : Exposer le port utilisé par l'application Node.js
-EXPOSE 9000
+# Exposez le port de l'application
+EXPOSE 5000
 
-# Étape 7 : Définir les variables d'environnement nécessaires
-ENV MONGO_URI=mongodb://mongodb:27017/mern-database
-
-# Étape 8 : Commande pour démarrer l'application
+# Lancer l'application
 CMD ["npm", "start"]

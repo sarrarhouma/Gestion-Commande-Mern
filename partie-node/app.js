@@ -37,7 +37,7 @@ app.use('/api/suppliers', suppliersRoutes);
 
 // Gestion des erreurs (404)
 app.use((req, res) => {
-    res.status(404).json({ message: 'Bienvenue sur api' });
+    res.status(404).json({ message: 'Ressource non trouvée' });
 });
 
 // Gestion globale des erreurs

@@ -1,0 +1,16 @@
+{
+  "name": "gestion_commande_mern",
+  "version": "1.0.0",
+  "description": "A web application designed to manage customer orders efficiently. Built using the **MERN stack** (MongoDB, Express, React, Node.js), the application provides features such as adding, tracking, and managing client orders with a user-friendly interface and a robust backend.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3"
+  }
+}
