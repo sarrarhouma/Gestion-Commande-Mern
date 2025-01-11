@@ -1,0 +1,138 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gestion-commande-mern.backend" . }}
+  labels:
+    {{- include "gestion-commande-mern.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "gestion-commande-mern.backend" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "gestion-commande-mern.backend" . }}
+    spec:
+      containers:
+        - name: backend
+          image: "{{ .Values.backend.image }}"  # Backend Docker image
+          imagePullPolicy: Always
+          env:
+            - name: NODE_ENV
+              value: {{ .Values.backend.env.NODE_ENV }}
+            - name: MONGO_URI
+              value: {{ .Values.backend.env.MONGO_URI }}
+          ports:
+            - containerPort: 5000
+          resources:
+            limits:
+              cpu: {{ .Values.backend.resources.limits.cpu }}
+              memory: {{ .Values.backend.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.backend.resources.requests.cpu }}
+              memory: {{ .Values.backend.resources.requests.memory }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gestion-commande-mern.frontend" . }}
+  labels:
+    {{- include "gestion-commande-mern.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "gestion-commande-mern.frontend" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "gestion-commande-mern.frontend" . }}
+    spec:
+      containers:
+        - name: frontend
+          image: "{{ .Values.frontend.image }}"  # Frontend Docker image
+          imagePullPolicy: Always
+          env:
+            - name: REACT_APP_API_URL
+              value: {{ .Values.frontend.env.REACT_APP_API_URL }}
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: {{ .Values.frontend.resources.limits.cpu }}
+              memory: {{ .Values.frontend.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.frontend.resources.requests.cpu }}
+              memory: {{ .Values.frontend.resources.requests.memory }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  labels:
+    app: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo
+          image: {{ .Values.mongo.image }}  # MongoDB Docker image
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+      volumes:
+        - name: mongo-data
+          persistentVolumeClaim:
+            claimName: mongo-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-replica
+  labels:
+    app: mongo-replica
+spec:
+  replicas: {{ .Values.mongo.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: mongo-replica
+  template:
+    metadata:
+      labels:
+        app: mongo-replica
+    spec:
+      containers:
+        - name: mongo
+          image: {{ .Values.mongo.image }}  # MongoDB Docker image
+          imagePullPolicy: Always
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secrets
+                  key: username
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secrets
+                  key: password
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+      volumes:
+        - name: mongo-data
+          persistentVolumeClaim:
+            claimName: mongo-pvc

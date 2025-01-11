@@ -1,0 +1,32 @@
+{{- if .Values.autoscaling.enabled }}  # Si l'autoscaling est activé dans values.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "gestion-commande-MERN.fullname" . }}  # Utilise le nom complet du chart
+  labels:
+    {{- include "gestion-commande-MERN.labels" . | nindent 4 }}  # Ajoute des labels pour le HPA
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "gestion-commande-MERN.fullname" . }}  # Nom du deployment cible
+  minReplicas: {{ .Values.autoscaling.minReplicas }}  # Nombre minimal de réplicas
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}  # Nombre maximal de réplicas
+  metrics:
+    {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}  # Vérifie si le seuil d'usage CPU est défini
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}  # Utilisation cible du CPU
+    {{- end }}
+    {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}  # Vérifie si le seuil d'usage de la mémoire est défini
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}  # Utilisation cible de la mémoire
+    {{- end }}
+{{- end }}

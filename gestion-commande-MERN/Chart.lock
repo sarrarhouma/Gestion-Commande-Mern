@@ -1,0 +1,9 @@
+dependencies:
+- name: mongodb
+  repository: https://charts.bitnami.com/bitnami
+  version: 16.4.0
+- name: nginx
+  repository: https://charts.bitnami.com/bitnami
+  version: 18.3.5
+digest: sha256:2eb0c57d8519e22d04b9ecd331e3d33681f0473ba412705452e2b0fba71eded3
+generated: "2025-01-11T17:29:28.5858876+01:00"

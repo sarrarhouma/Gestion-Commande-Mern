@@ -1,0 +1,111 @@
+# Default values for gestion-commande-mern.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Application settings
+app:
+  name: gestion-commande-mern
+  version: "1.0"
+  image:
+    backend: "gestion_commande_mern_backend"
+    frontend: "gestion_commande_mern_frontend"
+    mongo: "mongo:6"
+
+# MongoDB settings
+mongo:
+  enabled: true
+  image: "mongo:6"
+  replicaSet: "rs0"
+  replicaCount: 3  # Modified to 3 replicas
+  persistence:
+    enabled: true
+    size: 10Gi   # Increased size to 10Gi
+    storageClass: "standard"  # Change this if using custom storage class
+
+# Backend settings
+backend:
+  enabled: true
+  image: "{{ .Values.app.image.backend }}"  # Using the value from app.image.backend
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+  env:
+    NODE_ENV: "production"
+    MONGO_URI: "mongodb://mongo:27017/gestion_commande_mern"
+
+# Frontend settings
+frontend:
+  enabled: true
+  image: "{{ .Values.app.image.frontend }}"  # Using the value from app.image.frontend
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+  env:
+    REACT_APP_API_URL: "http://backend:5000"
+
+# Ingress settings
+ingress:
+  enabled: true
+  hosts:
+    - host: "gestion-commande-mern.example.com"  # Changez cela avec votre domaine
+      paths:
+        - "/" 
+  tls:
+    - secretName: "gestion-commande-tls"
+      hosts:
+        - "gestion-commande-mern.example.com"
+
+# Service settings
+service:
+  backend:
+    type: ClusterIP
+    port: 5000
+  frontend:
+    type: ClusterIP
+    port: 80
+
+# Resources for scaling the app
+replicaCount: 3
+
+# Monitoring
+monitoring:
+  enabled: true
+  prometheus:
+    enabled: true
+    serviceMonitor: 
+      interval: "30s"
+      port: 80
+
+# Custom configuration options
+customConfig:
+  customBackendPort: 5001
+  customFrontendPort: 8080
+
+# Security and authentication
+security:
+  jwtSecretKey: "your-secret-key-here"  # Change this to a strong secret key
+  enableHTTPS: true
+  apiKey: "your-api-key-here"
+
+# Service Account settings (added to resolve the error)
+serviceAccount:
+  create: true  # This ensures Helm will create the serviceAccount
+  name: "gestion-commande-mern-serviceaccount"  # Optional: you can change this name if needed
+
+autoscaling:
+  enabled: true  # Active ou désactive l'autoscaling
+  minReplicas: 1  # Nombre minimal de réplicas
+  maxReplicas: 3  # Nombre maximal de réplicas
+  targetCPUUtilizationPercentage: 80  # Seuil d'utilisation CPU pour l'autoscaling
+  targetMemoryUtilizationPercentage: 70  # Seuil d'utilisation mémoire pour l'autoscaling (optionnel)
+
