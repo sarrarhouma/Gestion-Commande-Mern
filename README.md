@@ -317,7 +317,7 @@ kubectl apply -f ./k8s/mongo-deployment.yaml
 ```bash
 kubectl get pods
 ```
-![Capture d'écran 2025-01-10 130510](https://github.com/user-attachments/assets/b7dcee04-d840-4346-b1f9-42a20174e184)
+![Capture d'écran 2025-01-11 174633](https://github.com/user-attachments/assets/4018f7e4-5d85-4921-82da-1ce9d30a821e)
 
 ---
 
