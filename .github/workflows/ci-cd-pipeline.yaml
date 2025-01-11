@@ -1,0 +1,54 @@
+name: CI/CD Pipeline for Gestion-Commande-MERN
+
+on:
+  push:
+    branches:
+      - main # Déclenchement sur les changements dans la branche principale
+  pull_request:
+    branches:
+      - main # Déclenchement lors des pull requests vers la branche principale
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and push Docker images
+      run: |
+        docker build -t yourusername/gestion-commande-mern-backend ./backend
+        docker build -t yourusername/gestion-commande-mern-frontend ./frontend
+        docker push yourusername/gestion-commande-mern-backend
+        docker push yourusername/gestion-commande-mern-frontend
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Argo CD CLI
+      run: |
+        curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.3.1/argocd-linux-amd64
+        chmod +x /usr/local/bin/argocd
+
+    - name: Login to Argo CD
+      run: |
+        argocd login argocd.example.com --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
+
+    - name: Sync with Argo CD
+      run: |
+        argocd app sync gestion-commande-mern --wait
