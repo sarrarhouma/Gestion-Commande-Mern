@@ -32,24 +32,15 @@ pipeline {
             }
         }
 
-        stage('Install Trivy') {
-            steps {
-                echo "Installing Trivy for vulnerability scanning..."
-                sh 'curl -sSL https://github.com/aquasecurity/trivy/releases/download/v0.29.2/trivy_0.29.2_Linux-64bit.deb -o trivy.deb'
-                sh 'sudo dpkg -i trivy.deb'
-                sh 'rm trivy.deb'
-            }
-        }
-
         stage('Scan Vulnerabilities') {
             steps {
                 echo "Scanning Docker images for vulnerabilities using Trivy..."
                 
-                // Scanner l'image backend
-                sh 'trivy image $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest || true'
+                // Scanner l'image backend avec Trivy dans un conteneur Docker
+                sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest || true'
                 
-                // Scanner l'image frontend
-                sh 'trivy image $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest || true'
+                // Scanner l'image frontend avec Trivy dans un conteneur Docker
+                sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest || true'
             }
         }
 
