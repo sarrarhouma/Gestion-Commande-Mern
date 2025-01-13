@@ -8,70 +8,72 @@ pipeline {
     }
 
     stages {
-        stage('Clone Repository') {
+        stage('Login to Docker Hub') {
             steps {
-                echo "Cloning the repository..."
-                checkout scm
+                echo "Logging in to Docker Hub..."
+                powershell """
+                docker login -u ${DOCKER_HUB_CREDENTIALS_USR} -p ${DOCKER_HUB_CREDENTIALS_PSW}
+                """
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                echo "Installing dependencies for MERN project..."
                 script {
-                    // Install backend dependencies
-                    sh '''
-                        cd partie-node
-                        npm install
-                    '''
-                    // Install frontend dependencies
-                    sh '''
-                        cd reactpart
-                        npm install
-                    '''
-                }
-            }
-        }
-
-        stage('Build Docker Images') {
-            steps {
-                echo "Building Docker images..."
-                script {
-                    // Build backend Docker image
-                    sh 'docker build -t $DOCKER_IMAGE_BACKEND:latest ./partie-node'
-
-                    // Build frontend Docker image
-                    sh 'docker build -t $DOCKER_IMAGE_FRONTEND:latest ./reactpart'
-                }
-            }
-        }
-
-        stage('Scan Vulnerabilities') {
-            steps {
-                echo "Scanning Docker images for vulnerabilities using Trivy..."
-                script {
-                    // Scan backend image with Trivy
-                    sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKER_IMAGE_BACKEND:latest || true'
-
-                    // Scan frontend image with Trivy
-                    sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKER_IMAGE_FRONTEND:latest || true'
-                }
-            }
-        }
-
-        stage('Push to Docker Hub') {
-            steps {
-                echo "Pushing Docker images to Docker Hub using PowerShell..."
-                powershell '''
-                    # Docker login
-                    echo $env.DOCKER_HUB_CREDENTIALS_PSW | docker login -u $env.DOCKER_HUB_CREDENTIALS_USR --password-stdin
+                    echo "Installing backend dependencies..."
+                    powershell """
+                    cd ./backend
+                    npm install
+                    """
                     
-                    # Push backend image
-                    docker push $env.DOCKER_IMAGE_BACKEND:latest
-                    
-                    # Push frontend image
-                    docker push $env.DOCKER_IMAGE_FRONTEND:latest
-                '''
+                    echo "Installing frontend dependencies..."
+                    powershell """
+                    cd ./frontend
+                    npm install
+                    """
+                }
+            }
+        }
+
+        stage('Security Scan') {
+            steps {
+                script {
+                    try {
+                        echo "Running security scan on backend Docker image using Trivy..."
+                        bat "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image ${DOCKER_IMAGE_BACKEND}"
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error "Security scan failed for backend: ${e.message}"
+                    }
+
+                    try {
+                        echo "Running security scan on frontend Docker image using Trivy..."
+                        bat "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image ${DOCKER_IMAGE_FRONTEND}"
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error "Security scan failed for frontend: ${e.message}"
+                    }
+                }
+            }
+        }
+
+        stage('Build and Push Backend Docker Image') {
+            steps {
+                echo "Building backend Docker image..."
+                powershell "docker build -t ${DOCKER_IMAGE_BACKEND} ./backend"
+                
+                echo "Pushing backend Docker image to Docker Hub..."
+                powershell "docker push ${DOCKER_IMAGE_BACKEND}"
+            }
+        }
+
+        stage('Build and Push Frontend Docker Image') {
+            steps {
+                echo "Building frontend Docker image..."
+                powershell "docker build -t ${DOCKER_IMAGE_FRONTEND} ./frontend"
+                
+                echo "Pushing frontend Docker image to Docker Hub..."
+                powershell "docker push ${DOCKER_IMAGE_FRONTEND}"
             }
         }
     }
