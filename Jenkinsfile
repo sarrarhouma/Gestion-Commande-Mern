@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE_BACKEND = 'gestion_commande_mern_backend'   // Docker image name for the backend
         DOCKER_IMAGE_FRONTEND = 'gestion_commande_mern_frontend' // Docker image name for the frontend
-        DOCKER_HUB_CREDENTIALS = credentials('dockerhub') // Docker Hub credentials stored in Jenkins
+        DOCKER_HUB_CREDENTIALS = credentials('dockerhub')        // Docker Hub credentials stored in Jenkins
     }
 
     stages {
@@ -52,14 +52,17 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-                echo "Pushing Docker images to Docker Hub..."
-                script {
-                    // Push backend image
-                    sh 'docker push $DOCKER_IMAGE_BACKEND:latest'
+                echo "Pushing Docker images to Docker Hub using PowerShell..."
+                powershell '''
+                    # Docker login
+                    echo $env.DOCKER_HUB_CREDENTIALS_PSW | docker login -u $env.DOCKER_HUB_CREDENTIALS_USR --password-stdin
                     
-                    // Push frontend image
-                    sh 'docker push $DOCKER_IMAGE_FRONTEND:latest'
-                }
+                    # Push backend image
+                    docker push $env.DOCKER_IMAGE_BACKEND:latest
+                    
+                    # Push frontend image
+                    docker push $env.DOCKER_IMAGE_FRONTEND:latest
+                '''
             }
         }
     }
