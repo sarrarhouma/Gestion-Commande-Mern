@@ -204,48 +204,11 @@ docker-compose up --build
 
 2. **Jenkins Pipeline for CI/CD**:
 
-```groovy
-pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                script {
-                    sh 'docker build -t gestion_commande_mern-backend ./backend'
-                    sh 'docker build -t gestion_commande_mern-frontend ./frontend'
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                script {
-                    sh 'npm test'
-                }
-            }
-        }
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    sh 'docker push gestion_commande_mern-backend:latest'
-                    sh 'docker push gestion_commande_mern-frontend:latest'
-                }
-            }
-        }
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    sh 'kubectl apply -f ./k8s/backend-deployment.yaml'
-                    sh 'kubectl apply -f ./k8s/frontend-deployment.yaml'
-                    sh 'kubectl apply -f ./k8s/mongo-deployment.yaml'
-                }
-            }
-        }
-    }
-}
-```
+
 
 3. **Jenkins Job**: Create a Jenkins pipeline job and point it to the repository containing your `Jenkinsfile`. Configure the job to run the above pipeline script.
 ![image](https://github.com/user-attachments/assets/93a8727b-6cb9-4faf-a739-d213371d3468)
+![image](https://github.com/user-attachments/assets/d592312a-784c-4252-a2ad-b418867c0892)
 
 ---
 
