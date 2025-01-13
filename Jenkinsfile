@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_BACKEND = 'gestion_commande_mern_backend'   // Docker image name for the backend
-        DOCKER_IMAGE_FRONTEND = 'gestion_commande_mern_frontend' // Docker image name for the frontend
+        DOCKER_IMAGE_BACKEND = 'sarrarhouma/gestion_commande_mern_backend'   // Docker image name for the backend
+        DOCKER_IMAGE_FRONTEND = 'sarrarhouma/gestion_commande_mern_frontend' // Docker image name for the frontend
     }
 
     stages {
