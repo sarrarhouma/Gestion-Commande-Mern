@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'gestion_commande_mern'               // Nom de l'image Docker
+        IMAGE_NAME = 'gestion_commande_mern'               // Nom d'image Docker
         DOCKER_REGISTRY = 'sarrarhouma'   // Nom d'utilisateur Docker Hub
         DOCKER_CREDENTIALS_ID = 'dockerhub' // ID des credentials Docker dans Jenkins
     }
@@ -28,6 +28,7 @@ pipeline {
             steps {
                 echo "Installing Trivy for vulnerability scanning..."
                 script {
+                    // Check if Trivy is already installed
                     sh '''
                     if ! command -v trivy &> /dev/null
                     then
