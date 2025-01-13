@@ -2,11 +2,13 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
+  labels:
+    app: backend
 spec:
-  replicas: 1
+  replicas: 1  # Number of pods to run
   selector:
     matchLabels:
-      app: backend
+      app: backend  # Must match the labels in the pod template
   template:
     metadata:
       labels:
@@ -14,22 +16,31 @@ spec:
     spec:
       containers:
       - name: backend
-        image: sarrarhouma/gestion_commande_mern-backend:latest  # Image sur Docker Hub
+        image: gestion_commande_mern-backend:latest
         ports:
-        - containerPort: 5000
+        - containerPort: 5000  # Expose port 5000 for the backend service
         env:
         - name: MONGO_URI
-          value: mongodb://mongo-service:27017/gestion-commande_MERN
+          value: mongodb://mongo-service:27017/gestion-commande_MERN  # MongoDB connection string
+        resources:
+          requests:
+            memory: "256Mi"  # Minimum memory required
+            cpu: "500m"      # Minimum CPU required
+          limits:
+            memory: "512Mi"  # Maximum memory allowed
+            cpu: "1000m"     # Maximum CPU allowed
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: backend-service
+  labels:
+    app: backend
 spec:
   selector:
-    app: backend
+    app: backend  # Match the app label of the pods
   ports:
   - protocol: TCP
-    port: 5000
-    targetPort: 5000
-  type: ClusterIP
+    port: 5000       # Port exposed by the service
+    targetPort: 5000 # Port exposed by the container
+  type: ClusterIP    # Internal service (not accessible from outside the cluster)

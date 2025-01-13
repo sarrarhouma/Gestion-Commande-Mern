@@ -1,62 +1,39 @@
 {{/*
-Expand the name of the chart.
+Définit un nom standardisé pour une ressource
 */}}
-{{- define "gestion-commande-MERN.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- define "gestion-commande-mern.name" -}}
+{{ .Chart.Name | lower }}
 {{- end }}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Définit un nom complet pour une ressource, incluant le nom du release
 */}}
-{{- define "gestion-commande-MERN.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
+{{- define "gestion-commande-mern.fullname" -}}
+{{ printf "%s-%s" .Release.Name (include "gestion-commande-mern.name" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
-Create chart name and version as used by the chart label.
+Ajoute des labels standardisés pour les ressources
 */}}
-{{- define "gestion-commande-MERN.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Common labels
-*/}}
-{{- define "gestion-commande-MERN.labels" -}}
-helm.sh/chart: {{ include "gestion-commande-MERN.chart" . }}
-{{ include "gestion-commande-MERN.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
+{{- define "gestion-commande-mern.labels" -}}
+helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+app.kubernetes.io/name: {{ include "gestion-commande-mern.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-Selector labels
+Ajoute des labels pour les sélections de ressources
 */}}
-{{- define "gestion-commande-MERN.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "gestion-commande-MERN.name" . }}
+{{- define "gestion-commande-mern.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "gestion-commande-mern.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create the name of the service account to use
+Définit le nom du ServiceAccount pour une ressource
 */}}
-{{- define "gestion-commande-MERN.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "gestion-commande-MERN.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
+{{- define "gestion-commande-mern.serviceAccountName" -}}
+{{ printf "%s-%s" (include "gestion-commande-mern.fullname" .) "serviceaccount" }}
 {{- end }}

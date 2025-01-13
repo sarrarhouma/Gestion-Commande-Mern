@@ -108,37 +108,7 @@ Password: admin123
 ### Dockerize the Application
 1. **Backend Dockerfile**: In the `/backend` folder, create a `Dockerfile` that builds the backend application image.
 
-```Dockerfile
-# Backend Dockerfile
-FROM node:16
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install
-
-COPY . .
-
-EXPOSE 5000
-CMD ["npm", "start"]
-```
-
 2. **Frontend Dockerfile**: In the `/frontend` folder, create a `Dockerfile` for the frontend.
-
-```Dockerfile
-# Frontend Dockerfile
-FROM node:16
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install
-
-COPY . .
-
-EXPOSE 3000
-CMD ["npm", "start"]
-```
 
 3. **Build Docker Images**
 
@@ -167,28 +137,6 @@ To simplify multi-container management, use Docker Compose for the entire applic
 
 1. **docker-compose.yml**:
 
-```yaml
-version: '3'
-services:
-  backend:
-    build:
-      context: ./backend
-    ports:
-      - "5000:5000"
-    depends_on:
-      - mongo
-  frontend:
-    build:
-      context: ./frontend
-    ports:
-      - "3000:3000"
-  mongo:
-    image: mongo
-    volumes:
-      - ./data/db:/data/db
-    ports:
-      - "27017:27017"
-```
 
 2. **Start All Services**
 
@@ -215,56 +163,6 @@ docker-compose up --build
 ## 🚢 Kubernetes Deployment
 
 1. **Kubernetes Configurations**:
-   - Use the following YAML files to configure and deploy the application in Kubernetes.
-
-```yaml
-# backend-deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: backend
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: backend
-  template:
-    metadata:
-      labels:
-        app: backend
-    spec:
-      containers:
-        - name: backend
-          image: gestion_commande_mern-backend:latest
-          ports:
-            - containerPort: 5000
-          env:
-            - name: MONGO_URI
-              value: "mongodb://mongo:27017/gestion_commande"
-
----
-
-# frontend-deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: frontend
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: frontend
-  template:
-    metadata:
-      labels:
-        app: frontend
-    spec:
-      containers:
-        - name: frontend
-          image: gestion_commande_mern-frontend:latest
-          ports:
-            - containerPort: 3000
-```
 
 2. **Apply Kubernetes Configurations**:
 ![Capture d'écran 2025-01-10 130500](https://github.com/user-attachments/assets/ad3a3a88-9b73-4d32-a5ec-7baba7141e97)

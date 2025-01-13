@@ -1,32 +1,32 @@
-{{- if .Values.autoscaling.enabled }}  # Si l'autoscaling est activé dans values.yaml
+{{- if .Values.autoscaling.enabled }}  # Vérifie si l'autoscaling est activé dans values.yaml
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "gestion-commande-MERN.fullname" . }}  # Utilise le nom complet du chart
+  name: {{ include "gestion-commande-mern.fullname" . }}  # Utilise le nom complet du chart
   labels:
-    {{- include "gestion-commande-MERN.labels" . | nindent 4 }}  # Ajoute des labels pour le HPA
+    {{- include "gestion-commande-mern.labels" . | nindent 4 }}  # Ajoute des labels standardisés pour le HPA
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "gestion-commande-MERN.fullname" . }}  # Nom du deployment cible
+    name: {{ include "gestion-commande-mern.fullname" . }}  # Nom du déploiement cible
   minReplicas: {{ .Values.autoscaling.minReplicas }}  # Nombre minimal de réplicas
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}  # Nombre maximal de réplicas
   metrics:
-    {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}  # Vérifie si le seuil d'usage CPU est défini
+    {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}  # Vérifie si le seuil d'utilisation CPU est défini
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}  # Utilisation cible du CPU
+          averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}  # Cible d'utilisation CPU
     {{- end }}
-    {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}  # Vérifie si le seuil d'usage de la mémoire est défini
+    {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}  # Vérifie si le seuil d'utilisation mémoire est défini
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}  # Utilisation cible de la mémoire
+          averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}  # Cible d'utilisation mémoire
     {{- end }}
 {{- end }}

@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "gestion-commande-MERN.fullname" . }}
+  name: {{ include "gestion-commande-mern.fullname" . }}
   labels:
-    {{- include "gestion-commande-MERN.labels" . | nindent 4 }}
+    {{- include "gestion-commande-mern.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -29,13 +29,13 @@ spec:
       http:
         paths:
           {{- range .paths }}
-          - path: {{ . | quote }}  # Utilisez directement la valeur de path
-            pathType: Prefix  # Définissez le pathType
+          - path: {{ .path | quote }}
+            pathType: Prefix
             backend:
               service:
-                name: {{ include "gestion-commande-MERN.fullname" $ }}
+                name: {{ include "gestion-commande-mern.fullname" $ }}-{{ .serviceName }}
                 port:
-                  number: {{ $.Values.service.backend.port }}
+                  number: {{ .servicePort }}
           {{- end }}
     {{- end }}
 {{- end }}

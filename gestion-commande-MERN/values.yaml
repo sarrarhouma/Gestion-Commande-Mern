@@ -56,14 +56,19 @@ frontend:
 # Ingress settings
 ingress:
   enabled: true
-  hosts:
-    - host: "gestion-commande-mern.example.com"  # Changez cela avec votre domaine
-      paths:
-        - "/" 
+  className: "nginx"
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
   tls:
-    - secretName: "gestion-commande-tls"
-      hosts:
-        - "gestion-commande-mern.example.com"
+    - hosts:
+        - "example.com"
+      secretName: "example-tls"
+  hosts:
+    - host: "example.com"
+      paths:
+        - path: "/"          # Chemin requis
+          serviceName: "backend"  # Nom du service requis
+          servicePort: 5000  # Port requis
 
 # Service settings
 service:
