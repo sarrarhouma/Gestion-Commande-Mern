@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'gestion_commande_mern'               // Nom d'image Docker
-        DOCKER_REGISTRY = 'sarrarhouma'   // Nom d'utilisateur Docker Hub
+        IMAGE_NAME_BACKEND = 'gestion_commande_mern_backend'  // Nom d'image Docker pour le backend
+        IMAGE_NAME_FRONTEND = 'gestion_commande_mern_frontend' // Nom d'image Docker pour le frontend
+        DOCKER_REGISTRY = 'sarrarhouma' // Nom d'utilisateur Docker Hub
         DOCKER_CREDENTIALS_ID = 'dockerhub' // ID des credentials Docker dans Jenkins
     }
 
@@ -15,11 +16,18 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Docker Images') {
             steps {
-                echo "Building Docker image..."
+                echo "Building Docker images..."
+                
+                // Construire l'image backend
                 script {
-                    sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME:latest .'
+                    sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest ./partie-node'
+                }
+                
+                // Construire l'image frontend
+                script {
+                    sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest ./reactpart'
                 }
             }
         }
@@ -27,37 +35,30 @@ pipeline {
         stage('Install Trivy') {
             steps {
                 echo "Installing Trivy for vulnerability scanning..."
-                script {
-                    // Check if Trivy is already installed
-                    sh '''
-                    if ! command -v trivy &> /dev/null
-                    then
-                        echo "Trivy not found, installing..."
-                        curl -sSL https://github.com/aquasecurity/trivy/releases/download/v0.29.2/trivy_0.29.2_Linux-64bit.deb -o trivy.deb
-                        sudo dpkg -i trivy.deb
-                        rm trivy.deb
-                    else
-                        echo "Trivy is already installed."
-                    fi
-                    '''
-                }
+                sh 'curl -sSL https://github.com/aquasecurity/trivy/releases/download/v0.29.2/trivy_0.29.2_Linux-64bit.deb -o trivy.deb'
+                sh 'sudo dpkg -i trivy.deb'
+                sh 'rm trivy.deb'
             }
         }
 
         stage('Scan Vulnerabilities') {
             steps {
-                echo "Scanning Docker image for vulnerabilities using Trivy..."
-                script {
-                    sh 'trivy image $DOCKER_REGISTRY/$IMAGE_NAME:latest || true'
-                }
+                echo "Scanning Docker images for vulnerabilities using Trivy..."
+                
+                // Scanner l'image backend
+                sh 'trivy image $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest || true'
+                
+                // Scanner l'image frontend
+                sh 'trivy image $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest || true'
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                echo "Pushing Docker image to Docker Hub..."
+                echo "Pushing Docker images to Docker Hub..."
                 withDockerRegistry([credentialsId: "$DOCKER_CREDENTIALS_ID", url: '']) {
-                    sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME:latest'
+                    sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest'
+                    sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest'
                 }
             }
         }
