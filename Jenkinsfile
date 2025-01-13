@@ -2,38 +2,28 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME_BACKEND = 'gestion_commande_mern_backend'  // Nom d'image Docker pour le backend
-        IMAGE_NAME_FRONTEND = 'gestion_commande_mern_frontend' // Nom d'image Docker pour le frontend
-        DOCKER_REGISTRY = 'sarrarhouma' // Nom d'utilisateur Docker Hub
-        DOCKER_CREDENTIALS_ID = 'dockerhub' // ID des credentials Docker dans Jenkins
+        DOCKER_IMAGE_BACKEND = 'gestion_commande_mern_backend'   // Docker image name for the backend
+        DOCKER_IMAGE_FRONTEND = 'gestion_commande_mern_frontend' // Docker image name for the frontend
+        DOCKER_HUB_CREDENTIALS = credentials('dockerhub') // Docker Hub credentials stored in Jenkins
     }
 
     stages {
         stage('Clone Repository') {
             steps {
                 echo "Cloning the repository..."
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                    checkout scm
-                }
+                checkout scm
             }
         }
 
         stage('Build Docker Images') {
             steps {
                 echo "Building Docker images..."
-                
-                // Construire l'image backend
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                    script {
-                        sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest ./partie-node'
-                    }
-                }
-
-                // Construire l'image frontend
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                    script {
-                        sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest ./reactpart'
-                    }
+                script {
+                    // Build backend Docker image
+                    sh 'docker build -t $DOCKER_IMAGE_BACKEND:latest ./partie-node'
+                    
+                    // Build frontend Docker image
+                    sh 'docker build -t $DOCKER_IMAGE_FRONTEND:latest ./reactpart'
                 }
             }
         }
@@ -41,15 +31,21 @@ pipeline {
         stage('Scan Vulnerabilities') {
             steps {
                 echo "Scanning Docker images for vulnerabilities using Trivy..."
-                
-                // Scanner l'image backend avec Trivy dans un conteneur Docker
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest || true'
+                script {
+                    // Scan backend image with Trivy
+                    sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKER_IMAGE_BACKEND:latest || true'
+                    
+                    // Scan frontend image with Trivy
+                    sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKER_IMAGE_FRONTEND:latest || true'
                 }
+            }
+        }
 
-                // Scanner l'image frontend avec Trivy dans un conteneur Docker
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest || true'
+        stage('Docker Login') {
+            steps {
+                echo "Logging in to Docker Hub..."
+                script {
+                    sh 'echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin'
                 }
             }
         }
@@ -57,11 +53,12 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 echo "Pushing Docker images to Docker Hub..."
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                    withDockerRegistry([credentialsId: "$DOCKER_CREDENTIALS_ID", url: '']) {
-                        sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest'
-                        sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest'
-                    }
+                script {
+                    // Push backend image
+                    sh 'docker push $DOCKER_IMAGE_BACKEND:latest'
+                    
+                    // Push frontend image
+                    sh 'docker push $DOCKER_IMAGE_FRONTEND:latest'
                 }
             }
         }
