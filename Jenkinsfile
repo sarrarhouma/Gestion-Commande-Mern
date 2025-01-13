@@ -12,7 +12,9 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 echo "Cloning the repository..."
-                checkout scm
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    checkout scm
+                }
             }
         }
 
@@ -21,13 +23,17 @@ pipeline {
                 echo "Building Docker images..."
                 
                 // Construire l'image backend
-                script {
-                    sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest ./partie-node'
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    script {
+                        sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest ./partie-node'
+                    }
                 }
-                
+
                 // Construire l'image frontend
-                script {
-                    sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest ./reactpart'
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    script {
+                        sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest ./reactpart'
+                    }
                 }
             }
         }
@@ -37,19 +43,25 @@ pipeline {
                 echo "Scanning Docker images for vulnerabilities using Trivy..."
                 
                 // Scanner l'image backend avec Trivy dans un conteneur Docker
-                sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest || true'
-                
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest || true'
+                }
+
                 // Scanner l'image frontend avec Trivy dans un conteneur Docker
-                sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest || true'
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest || true'
+                }
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
                 echo "Pushing Docker images to Docker Hub..."
-                withDockerRegistry([credentialsId: "$DOCKER_CREDENTIALS_ID", url: '']) {
-                    sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest'
-                    sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest'
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    withDockerRegistry([credentialsId: "$DOCKER_CREDENTIALS_ID", url: '']) {
+                        sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME_BACKEND:latest'
+                        sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME_FRONTEND:latest'
+                    }
                 }
             }
         }
